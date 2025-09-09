@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Sum Login</title>
+  <style>
+    :root { font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; }
+    body { display:flex; min-height:100vh; align-items:center; justify-content:center; margin:0; background:#f7f9fc; }
+    .card { background:#fff; padding:24px; border-radius:12px; box-shadow:0 6px 20px rgba(20,30,50,0.08); width:320px; }
+    h1 { margin:0 0 12px; font-size:20px; text-align:center; }
+    label { display:block; font-size:13px; margin-top:8px; }
+    input[type="number"] { width:100%; padding:10px; margin-top:6px; box-sizing:border-box; border:1px solid #dbe6f0; border-radius:8px; font-size:15px; }
+    button { width:100%; margin-top:14px; padding:10px; border-radius:8px; border:0; font-weight:600; cursor:pointer; background:#2563eb; color:#fff; font-size:15px; }
+    .msg { margin-top:12px; font-size:14px; text-align:center; min-height:20px; }
+    .error { color:#b91c1c; }
+    .success { color:#059669; }
+    .small { font-size:12px; color:#6b7280; margin-top:8px; text-align:center; }
+  </style>
+</head>
+<body>
+  <main class="card" role="main" aria-labelledby="title">
+    <h1 id="title">Login by Adding Two Numbers</h1>
+
+    <label for="a">Number A</label>
+    <input id="a" type="number" inputmode="numeric" autocomplete="off" />
+
+    <label for="b">Number B</label>
+    <input id="b" type="number" inputmode="numeric" autocomplete="off" />
+
+    <button id="submit">Log In</button>
+
+    <div class="msg" id="msg" aria-live="polite"></div>
+    <div class="small">Enter the two numbers whose sum equals the secret number to log in.</div>
+  </main>
+
+  <script>
+    (function(){
+      // ======= configure secret sum here =======
+      const targetSum = 10; // change this to any number you want
+      // =========================================
+
+      const a = document.getElementById('a');
+      const b = document.getElementById('b');
+      const btn = document.getElementById('submit');
+      const msg = document.getElementById('msg');
+
+      function showMessage(text, cls) {
+        msg.textContent = text;
+        msg.className = 'msg ' + (cls || '');
+      }
+
+      function tryLogin() {
+        // read values
+        const va = parseFloat(a.value);
+        const vb = parseFloat(b.value);
+
+        // simple validation
+        if (Number.isNaN(va) || Number.isNaN(vb)) {
+          showMessage('Please enter both numbers.', 'error');
+          return;
+        }
+
+        const sum = va + vb;
+
+        if (sum === targetSum) {
+          showMessage('Login successful — redirecting...', 'success');
+
+          // simulate successful login: redirect after short delay
+          // If you don't want redirect, remove the setTimeout and show a dashboard message instead.
+          setTimeout(() => {
+            // change to your protected page or show content inline
+            // For demo we'll open dashboard.html (create one) or show inline content if page missing.
+            window.location.href = 'dashboard.html';
+          }, 800);
+        } else {
+          showMessage('Wrong sum. Try again.', 'error');
+        }
+      }
+
+      // allow Enter key to submit
+      [a, b].forEach(el => {
+        el.addEventListener('keydown', function(e) {
+          if (e.key === 'Enter') tryLogin();
+        });
+      });
+
+      btn.addEventListener('click', tryLogin);
+
+      // optional: helpful hint for development (remove in production)
+      console.log('DEBUG: targetSum =', targetSum);
+    })();
+  </script>
+</body>
+</html>
+
